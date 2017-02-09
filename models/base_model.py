@@ -1,27 +1,44 @@
 #!usr/bin/python3
-import datetime, uuid
-from models.engine.file_storage import FileStorage
-
-storage=FileStorage()
+from datetime import datetime, date, time
+import uuid
+from . import storage
 
 class BaseModel:
     def __init__(self, *args, **kwargs):
-        for i in args:
-            if type(i) is dict:
-                i[created_at] = datetime.strptime(arg[created_at])
-                i[updated_at] = datetime.strptime(arg[updated_at])
-                self.__dict__ = i
-            else:
-                self.id = str(uuid.uuid4())
-                self.created_at = datetime.datetime(now)
-                storage.new(self)
+        dict_flag = 0
+        for arg in args:
+            if type(arg) is dict:
+                dict_flag = 1
+                break
+        if dict_flag == 1:
+            arg[created_at] = datetime.strptime(
+                arg[created_at], "%Y-%m-%d %H:%M:%S.%f")
+            arg[updated_at] = datetime.strptime(
+                arg[updated_at], "%Y-%m-%d %H:%M:%S.%f")
+            self.__dict__ = i
+        else:
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.now()
+            storage.new(self)
+
+    def my_number(self, my_number):
+        self.my_number = my_number
+
+    def name(self, name):
+        self.name = name
+
     def save(self):
-        self.updated_at = datetime.datetime.now()
-        storage.new(self)
+        self.updated_at = datetime.now()
         storage.save()
+
     def __str__(self):
-        return "[{}] ({}) {}".format(__name__, str(self.id), self.__dict__)
+        return "[{}] ({}) {}".format(self.__class__.__name__, self.id, self.__dict__)
+
     def to_json(self):
-        temp = self.__dict__.copy()
-        temp["__class__"] = type(self).__name__
-        return temp
+        """Shout out to Danton"""
+        temp = {}
+        for i in self.__dict__.keys():
+            if (isinstance(self.__dict__[i], datetime)):
+                temp[i] = str(self.__dict__[i])
+        temp['__class__'] = self.__class__.__name__
+        return(temp)

@@ -5,31 +5,29 @@ class FileStorage:
     __file_path = 'file.json'
     __objects = {}
 
-    def __init__(self):
-        self.reload()
-
     def all(self):
         return FileStorage.__objects
 
     def new(self, obj):
         if obj is not None:
-            FileStorage.__objects[obj.id] = obj.__dict__
+            FileStorage.__objects[obj.id] = obj
 
     def save(self):
-        serialized = {}
-        for key in self.__objects.keys():
-            serialized[key] = self.objects[key].to_json()
-        with open(FileStorage.__file_path, mode='w+', encoding='utf-8') as MyFile:
-            json.dump(serial, MyFile)
+        with open(FileStorage.__file_path, mode='w', encoding='utf-8') as MyFile:
+            serialized = {}
+            for key in FileStorage.__objects.keys():
+                serialized[key] = FileStorage.__objects[key].to_json()
+            print("saving file...")
+            MyFile.write(json.dumps(serialized))
 
     def reload(self):
+        from models.base_model import BaseModel
         try:
             with open(FileStorage.__file_path, mode="r", encoding="utf-8") as MyFile:
-                try:
-                    obj = json.loads(MyFile)
+                    Filestorage.__objects = {}
+                    obj = json.load(MyFile)
                     for key in obj.keys():
                         Filestorage.__objects[key] = BaseModel(obj[key])
-                except Exception as e:
-                    print("Error storing json:", e)
-        except Exception:
+        except Exception as e:
+            print(e)
             pass
