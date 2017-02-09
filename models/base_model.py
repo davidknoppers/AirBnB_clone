@@ -11,11 +11,11 @@ class BaseModel:
                 dict_flag = 1
                 break
         if dict_flag == 1:
-            arg[created_at] = datetime.strptime(
-                arg[created_at], "%Y-%m-%d %H:%M:%S.%f")
-            arg[updated_at] = datetime.strptime(
-                arg[updated_at], "%Y-%m-%d %H:%M:%S.%f")
-            self.__dict__ = i
+            args[0]['created_at'] = datetime.strptime(
+                args[0]['created_at'], '%Y-%m-%d %H:%M:%S.%f')
+            args[0]['updated_at'] = datetime.strptime(
+                args[0]['updated_at'], '%Y-%m-%d %H:%M:%S.%f')
+            self.__dict__ = args[0]
         else:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
@@ -32,7 +32,7 @@ class BaseModel:
         storage.save()
 
     def __str__(self):
-        return "[{}] ({}) {}".format(self.__class__.__name__, self.id, self.__dict__)
+        return "[{}] ({}) {}".format(type(self).__name__, self.id, self.__dict__)
 
     def to_json(self):
         """Shout out to Danton"""
@@ -40,5 +40,7 @@ class BaseModel:
         for i in self.__dict__.keys():
             if (isinstance(self.__dict__[i], datetime)):
                 temp[i] = str(self.__dict__[i])
+            else:
+                temp[i] = self.__dict__[i]
         temp['__class__'] = self.__class__.__name__
         return(temp)
