@@ -89,7 +89,8 @@ class ConsoleShell(cmd.Cmd):
             print("Usage: show BaseModel <1234-1234-1234>")
         else:
             objects = storage.all()
-            if id_ objects.keys():
+            id_ = args[1]
+            if id_ in objects.keys():
                 print(objects[id_])
             else:
                 print(self.errors["noid"])
