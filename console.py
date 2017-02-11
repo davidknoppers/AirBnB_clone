@@ -4,7 +4,6 @@ Console for AirBnb Clone
 """
 import cmd
 from models import *
-import json
 
 class ConsoleShell(cmd.Cmd):
     intro = 'Five Yearsssss'

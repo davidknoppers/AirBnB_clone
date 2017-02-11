@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import json, os
+from models import *
 
 class FileStorage:
     __file_path = 'file.json'
