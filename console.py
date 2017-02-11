@@ -6,6 +6,7 @@ import cmd
 from models import *
 
 class ConsoleShell(cmd.Cmd):
+    storage.reload()
     intro = 'Five Yearsssss'
     prompt = '(hbnb) '
     errors = {"noinst": "** no instance found **",
@@ -40,28 +41,32 @@ class ConsoleShell(cmd.Cmd):
         if args is None:
             return
         args = args.split()
+        print("length of args is: {}".format(len(args)))
         if len(args) != 1:
-            print(self.errors[noclassname])
-        elif len(args) > 1 and args[0] in self.classes:
-            new = eval(args[0]())
+            print(self.errors['noclassname'])
+        elif args[0] in self.classes:
+            new = eval(args[0])()
             print(new.id)
             new.save()
         else:
-            print(self.errors[cnm_nvl])
+            print(self.errors['cnm_inval'])
 
     def do_destroy(self, args):
         """Deletes an instance of an object
         Usage: (hbnb) destroy <name> <id>"""
+        if args is None:
+            return("Usage: (hbnb) destroy <name> <id>")
         args = args.split()
         if len(args) < 1:
             return self.errors["noclass"]
         if len(args) < 2:
             return self.errors["noid"]
-        if args[0] not in classes:
+        if args[0] not in self.classes:
             return self.errors["noclass"]
-        if args[1] not in self.obj:
+        obj = storage.all()
+        if args[1] not in obj.keys():
             return self.errors["noinst"]
-        del self.obj[args[1]]
+        del obj[args[1]]
         storage.save()
 
     def emptyline(self):
@@ -78,21 +83,16 @@ class ConsoleShell(cmd.Cmd):
 
     def do_show(self, args):
         """ displays object instances"""
-        classes = ["BaseModel", "User", "State", "City",
-                   "Amenity", "Place", "Review"]
-        if args is None or args.split() != 2:
-            return("Usage: show <BaseModel> <1234-1234-1234>")
+        print("args received: {}".format(args))
         args = args.split()
-        if len(args[0]) == 0:
-            return (self.errors["noinst"])
-        elif not self.is_class(args[0]):
-            return (self.errors["badclass"])
+        if len(args) != 2:
+            print("Usage: show BaseModel <1234-1234-1234>")
         else:
-            all_instances = storage.all()
-            for id_ in all_instances.keys():
-                if id_ == args[1]:
-                    print(all_instances[id_])
-
+            objects = storage.all()
+            if id_ objects.keys():
+                print(objects[id_])
+            else:
+                print(self.errors["noid"])
     def do_update(self, args):
         """Usage: update <class name> <id> <attribute name> <attribute value>"""
         if args is None:
