@@ -20,7 +20,8 @@ class ConsoleShell(cmd.Cmd):
 
     def do_all(self, args):
         """ Prints all instances of an object"""
-        args = args.split(' ')
+        args = args.split()
+        print("arg length: {}".format(len(args)))
         if len(args) > 1:
             if args[0] in self.classes:
                 storage.reload()
@@ -38,10 +39,7 @@ class ConsoleShell(cmd.Cmd):
 
     def do_create(self, args):
         """type 'create' to make an empty BaseModel"""
-        if args is None:
-            return
         args = args.split()
-        print("length of args is: {}".format(len(args)))
         if len(args) != 1:
             print(self.errors['noclassname'])
         elif args[0] in self.classes:
@@ -55,19 +53,22 @@ class ConsoleShell(cmd.Cmd):
         """Deletes an instance of an object
         Usage: (hbnb) destroy <name> <id>"""
         if args is None:
-            return("Usage: (hbnb) destroy <name> <id>")
-        args = args.split()
-        if len(args) < 1:
-            return self.errors["noclass"]
-        if len(args) < 2:
-            return self.errors["noid"]
-        if args[0] not in self.classes:
-            return self.errors["noclass"]
-        obj = storage.all()
-        if args[1] not in obj.keys():
-            return self.errors["noinst"]
-        del obj[args[1]]
-        storage.save()
+            print("Usage: (hbnb) destroy <name> <id>")
+        else:
+            args = args.split()
+            if len(args) < 1:
+                print(self.errors["noclassname"])
+            elif len(args) < 2:
+                print(self.errors["noid"])
+            elif args[0] not in self.classes:
+                print(self.errors["noclass"])
+            else:
+                obj = storage.all()
+                if args[1] in obj.keys():
+                    del obj[args[1]]
+                    storage.save()
+                else:
+                    print(self.errors["noinst"])
 
     def emptyline(self):
         """empty lines do nothing"""
