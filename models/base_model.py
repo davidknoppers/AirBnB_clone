@@ -1,25 +1,18 @@
 #!usr/bin/python3
-from datetime import datetime, date, time
 import uuid
 import models
+from datetime import datetime, date, time
 
 class BaseModel:
     def __init__(self, *args, **kwargs):
-        dict_flag = 0
-        for arg in args:
-            if type(arg) is dict:
-                dict_flag = 1
-                break
-        if dict_flag == 1:
-            args[0]['created_at'] = datetime.strptime(
-                args[0]['created_at'], '%Y-%m-%d %H:%M:%S.%f')
-            args[0]['updated_at'] = datetime.strptime(
-                args[0]['updated_at'], '%Y-%m-%d %H:%M:%S.%f')
-            self.__dict__ = args[0]
+        if len(args) > 0:
+            for i in args[0]:
+                setattr(self, i, args[0][i])
         else:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             models.storage.new(self)
+            models.storage.save()
 
     def my_number(self, my_number):
         self.my_number = my_number
@@ -32,7 +25,8 @@ class BaseModel:
         models.storage.save()
 
     def __str__(self):
-        return "[{}] ({}) {}".format(type(self).__name__, self.id, self.__dict__)
+        return "[{}] ({}) {}".format(type(self).
+                                     __name__, self.id, self.__dict__)
 
     def to_json(self):
         """Shout out to Danton"""
