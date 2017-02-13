@@ -1,6 +1,8 @@
 #!/usr/bin/python3
-import json, os
+import json
+import os
 from models import *
+
 
 class FileStorage:
     __file_path = 'file.json'
@@ -16,14 +18,16 @@ class FileStorage:
         serialized = {}
         for key in FileStorage.__objects.keys():
             serialized[key] = FileStorage.__objects[key].to_json()
-        with open(FileStorage.__file_path, mode='w', encoding='utf-8') as MyFile:
+        with open(FileStorage.__file_path, mode='w', encoding='utf-8')
+        as MyFile:
             MyFile.write(json.dumps(serialized))
 
     def reload(self):
         from models.base_model import BaseModel
         if os.path.isfile(FileStorage.__file_path):
             try:
-                with open(FileStorage.__file_path, mode="r", encoding="utf-8") as MyFile:
+                with open(FileStorage.__file_path, mode="r", encoding="utf-8")
+                as MyFile:
                     obj = json.load(MyFile)
                     for key in obj.keys():
                         FileStorage.__objects[key] = BaseModel(obj[key])
