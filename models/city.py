@@ -1,5 +1,10 @@
 #!/usr/bin/python3
 from models import *
+"""
+City is a basic class
+Inherits some stuff and gets a name and id
+Basically just calls super
+"""
 
 
 class City(BaseModel):

@@ -1,9 +1,24 @@
 #!/usr/bin/python3
 from models import *
+"""
+Basic class
+Inherits from basemodel and adds a ton of attributes
+Doesn't do much yet
+"""
 
 
 class Place(BaseModel):
+    """
+    Basic class
+    Inherits from basemodel and adds a ton of attributes
+    Doesn't do much yet
+    """
     def __init__(self, *args, **kwargs):
+        """
+        Basic class
+        Inherits from basemodel and adds a ton of attributes
+        Doesn't do much yet
+        """
         super().__init__()
         self.amenities = [""]
         self.city_id = ""
