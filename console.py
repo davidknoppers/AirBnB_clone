@@ -103,8 +103,8 @@ class HBNBCommand(cmd.Cmd):
     def do_show(self, args):
         """ displays object instances"""
         args = args.split()
-        if len(args) != 2:
-            print("Usage: show BaseModel <1234-1234-1234>")
+        if len(args) < 2:
+            print(self.errors["noinst"])
         else:
             objects = storage.all()
             id_ = args[1]
