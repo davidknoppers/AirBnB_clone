@@ -58,5 +58,4 @@ class FileStorage:
                     up_at = datetime.strptime(up_at, "%Y-%m-%d %H:%M:%S.%f")
                     FileStorage.__objects[i] = eval(class_)(temp[i])
         except Exception as e:
-            print(e)
             pass
