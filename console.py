@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+!/usr/bin/python3
 """
 Console for AirBnb Clone
 Two hundred lines of functionality, aww yeah
@@ -195,7 +195,6 @@ class HBNBCommand(cmd.Cmd):
         if '.all()' in args:
             self.do_all(classname)
         elif args[:6] == '.show(':
-            print(args)
             self.do_show(classname + ' ' + args[7:-2])
         elif args[:8] == ".count()":
             count = 0
