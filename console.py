@@ -9,7 +9,6 @@ import cmd
 from models import *
 
 
-
 class HBNBCommand(cmd.Cmd):
     """
     Main class for the console
@@ -20,19 +19,20 @@ class HBNBCommand(cmd.Cmd):
     prompt = '(hbnb) '
     errors = {"noinst": "** no instance found **",
               "noid": "** instance id missing **",
-              "noclass" :"** class doesn't exist **",
+              "noclass": "** class doesn't exist **",
               "noclassname": "** class name missing **",
               "noval": "** value missing **",
               "cnm_inval": "**class name invalid**"}
     classes = ["BaseModel", "User", "State", "City",
-                   "Amenity", "Place", "Review"]
+               "Amenity", "Place", "Review"]
 
     def do_all(self, args):
         """
         Prints all instances of an object
+        Can be called directly or through object type
+        example: all BaseModel
         """
         args = args.split()
-        print("arg length: {}".format(len(args)))
         if len(args) > 1:
             if args[0] in self.classes:
                 storage.reload()
@@ -49,7 +49,11 @@ class HBNBCommand(cmd.Cmd):
                 print(my_dict[key])
 
     def do_create(self, args):
-        """type 'create' to make an empty BaseModel"""
+        """
+        creates one instance of an object with a random id
+        Can be called directly or through object type
+        example: create User
+        """
         args = args.split()
         if len(args) != 1:
             print(self.errors['noclassname'])
@@ -61,8 +65,11 @@ class HBNBCommand(cmd.Cmd):
             print(self.errors['cnm_inval'])
 
     def do_destroy(self, args):
-        """Deletes an instance of an object
-        Usage: (hbnb) destroy <name> <id>"""
+        """
+        Deletes an instance of an object, given object name and id
+        No printout after execution is good news
+        example: destroy <name> <id>
+        """
         if args is None:
             print("Usage: (hbnb) destroy <name> <id>")
         else:
@@ -95,7 +102,6 @@ class HBNBCommand(cmd.Cmd):
 
     def do_show(self, args):
         """ displays object instances"""
-        print("args received: {}".format(args))
         args = args.split()
         if len(args) != 2:
             print("Usage: show BaseModel <1234-1234-1234>")
@@ -105,13 +111,18 @@ class HBNBCommand(cmd.Cmd):
             if id_ in objects.keys():
                 print(objects[id_])
             else:
-                print(self.errors["noid"])
+                print(self.errors["noinst"])
+
     def do_update(self, args):
-        """Usage: update <class name> <id> <attribute name> <attribute value>"""
+        """
+        updates an instance of an object, given object name and id
+        No printout after execution is good news
+        example: update <class name> <id> <attribute name> <attribute value>
+        """
+
         args = args.split()
         if len(args) != 4:
-            print("$ update BaseModel 1234-1234-1234 email"
-            "aibnb@holbertonschool.com")
+            print("usage: update BaseModel <id> <attribute> <value>")
         else:
             all_ = storage.all()
             for id_ in all_.keys():
@@ -119,35 +130,72 @@ class HBNBCommand(cmd.Cmd):
                     setattr(all_[id_], args[2], args[3])
             storage.save()
 
-            """
-            functionality for advanced tasks
-            """
-
     def do_User(self, args):
+        """
+        Essentially a helper function
+        Calls helper function to this object
+        example: <this object name>.all() will call all on this object
+        """
         self.class_exec('User', args)
 
     def do_BaseModel(self, args):
+        """
+        Essentially a helper function
+        Calls helper function to this object
+        example: <this object name>.all() will call all on this object
+        """
         self.class_exec('BaseModel', args)
 
     def do_State(self, args):
+        """
+        Essentially a helper function
+        Calls helper function to this object
+        example: <this object name>.all() will call all on this object
+        """
         self.class_exec('State', args)
 
     def do_City(self, args):
+        """
+        Essentially a helper function
+        Calls helper function to this object
+        example: <this object name>.all() will call all on this object
+        """
         self.class_exec('City', args)
 
     def do_Amenity(self, args):
+        """
+        Essentially a helper function
+        Calls helper function to this object
+        example: <this object name>.all() will call all on this object
+        """
         self.class_exec('Amenity', args)
 
     def do_Place(self, args):
+        """
+        Essentially a helper function
+        Calls helper function to this object
+        example: <this object name>.all() will call all on this object
+        """
         self.class_exec('Place', args)
 
     def do_Review(self, args):
+        """
+        Essentially a helper function
+        Calls helper function to this object
+        example: <this object name>.all() will call all on this object
+        """
         self.class_exec('Review', args)
 
     def class_exec(self, classname, args):
-        if args[:6] == '.all()':
+        """
+        class_exec is a helper function that allows the user to call functions
+        from objects, e.g. User.all()
+        <object name>.count() will call the count function on an object
+        """
+        if '.all()' in args:
             self.do_all(classname)
         elif args[:6] == '.show(':
+            print(args)
             self.do_show(classname + ' ' + args[7:-2])
         elif args[:8] == ".count()":
             count = 0
@@ -164,8 +212,6 @@ class HBNBCommand(cmd.Cmd):
                             count += 1
 
             print(count)
-
-
         elif args[:9] == '.destroy(':
             self.do_destroy(classname + ' ' + args[10:-2])
         elif args[:8] == '.update(':
@@ -181,11 +227,12 @@ class HBNBCommand(cmd.Cmd):
                 self.do_update(classname + ' ' + new_arg)
             elif len(new_arg) == 2:
                 try:
-                    dty = eval(new_arg[1])
+                    temp = eval(new_arg[1])
                 except:
                     return
-                for j in dty.keys():
-                    self.do_update(classname + ' ' + new_arg[0][1:-3] + ' ' + str(j) + ' ' + str(dty[j]))
+                for i in temp.keys():
+                    self.do_update(classname + ' ' + new_arg[0][1:-3] + ' '
+                                   + str(i) + ' ' + str(temp[i]))
         else:
             print("Command not recognized")
 
