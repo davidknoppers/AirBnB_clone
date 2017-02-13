@@ -3,6 +3,7 @@ import uuid
 import models
 from datetime import datetime, date, time
 
+
 class BaseModel:
     def __init__(self, *args, **kwargs):
         if len(args) > 0:

@@ -4,6 +4,7 @@ User, inherits from BaseModel
 """
 from models import *
 
+
 class User(BaseModel):
     def __init__(self, *args, **kwargs):
         """

@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 from models import *
 
+
 class Place(BaseModel):
     def __init__(self, *args, **kwargs):
         super().__init__()
