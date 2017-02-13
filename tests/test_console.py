@@ -7,9 +7,9 @@ import sys
 import unittest
 from unittest import mock
 from unittest.mock import create_autospec
+from unittest.mock import patch
 from io import StringIO
 from console import HBNBCommand
-
 
 
 class TestConsole(unittest.TestCase):
@@ -33,19 +33,6 @@ class TestConsole(unittest.TestCase):
         self.assertTrue(cli.onecmd("EOF"))
 
     def test_help(self):
-        """test method for help output"""
-        cli = self.create()
-        output = "BaseModel  EOF   Review  User   count  destroy  quit  update\n\n"
-        self.assertFalse(cli.onecmd("help"))
-        self.assertEqual(output, self._last_write(2))
-
-    def test_show(self):
-        cli = self.create()
-        self.assertFalse(cli.onecmd("show"))
-        output = "** instance id missing **\n"
-        self.assertEqual(expected, self._last_write(1))
-
-    def test_help(self):
         """test help command"""
 
     def test_exit(self):
@@ -63,7 +50,7 @@ class TestConsole(unittest.TestCase):
         cli = self.create()
         with patch('sys.stdout', new=StringIO()) as fakeOutput:
             self.assertFalse(cli.onecmd('create'))
-        self.assertEqual('** class name is missing **',
+        self.assertEqual('** class name missing **',
                          fakeOutput.getvalue().strip())
 
     def test_show_object(self):
@@ -87,7 +74,7 @@ class TestConsole(unittest.TestCase):
         cli = self.create()
         bad_input = 'update BaseModel ChilledCow-ChanceTheRapper-98-98 age'
         with patch('sys.stdout', new=StringIO()) as fakeOutput:
-            self.assertFalse(cli.onecmd(in_put))
+            self.assertFalse(cli.onecmd(bad_input))
         self.assertEqual('** value missing **', '** value missing **')
 
     def test_all(self):
