@@ -19,7 +19,7 @@ class BaseModel:
         else:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
-            storage.new(self)
+            models.storage.new(self)
 
     def my_number(self, my_number):
         self.my_number = my_number
@@ -29,7 +29,7 @@ class BaseModel:
 
     def save(self):
         self.updated_at = datetime.now()
-        storage.save()
+        models.storage.save()
 
     def __str__(self):
         return "[{}] ({}) {}".format(type(self).__name__, self.id, self.__dict__)

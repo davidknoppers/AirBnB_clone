@@ -1,13 +1,22 @@
 #!/usr/bin/python3
 """
 Console for AirBnb Clone
+Two hundred lines of functionality, aww yeah
+Can be used with direct commands, e.g. create BaseModel,
+or by calling objects e.g. BaseModel.count()
 """
 import cmd
 from models import *
 
-class ConsoleShell(cmd.Cmd):
+
+
+class HBNBCommand(cmd.Cmd):
+    """
+    Main class for the console
+    Contains all helper function excluding memory management
+    Memory management is handled by file_storage
+    """
     storage.reload()
-    intro = 'Five Yearsssss'
     prompt = '(hbnb) '
     errors = {"noinst": "** no instance found **",
               "noid": "** instance id missing **",
@@ -19,7 +28,9 @@ class ConsoleShell(cmd.Cmd):
                    "Amenity", "Place", "Review"]
 
     def do_all(self, args):
-        """ Prints all instances of an object"""
+        """
+        Prints all instances of an object
+        """
         args = args.split()
         print("arg length: {}".format(len(args)))
         if len(args) > 1:
@@ -97,23 +108,86 @@ class ConsoleShell(cmd.Cmd):
                 print(self.errors["noid"])
     def do_update(self, args):
         """Usage: update <class name> <id> <attribute name> <attribute value>"""
-        if args is None:
-            return
         args = args.split()
         if len(args) != 4:
-            return("$ update BaseModel 1234-1234-1234 email"
+            print("$ update BaseModel 1234-1234-1234 email"
             "aibnb@holbertonschool.com")
-        all_ = storage.all()
-        for id_ in all_.keys():
-            if id_ == args[1]:
-                setattr(all_[id_], args[2], args[3])
-        storage.save()
+        else:
+            all_ = storage.all()
+            for id_ in all_.keys():
+                if id_ == args[1]:
+                    setattr(all_[id_], args[2], args[3])
+            storage.save()
 
-    def is_class(self, name):
-        """checks if arg is in list of known classes"""
-        classes = ["BaseModel", "User", "State", "City", "Review",
-                         "Amenity", "Place"]
-        return name in classes
+            """
+            functionality for advanced tasks
+            """
+
+    def do_User(self, args):
+        self.class_exec('User', args)
+
+    def do_BaseModel(self, args):
+        self.class_exec('BaseModel', args)
+
+    def do_State(self, args):
+        self.class_exec('State', args)
+
+    def do_City(self, args):
+        self.class_exec('City', args)
+
+    def do_Amenity(self, args):
+        self.class_exec('Amenity', args)
+
+    def do_Place(self, args):
+        self.class_exec('Place', args)
+
+    def do_Review(self, args):
+        self.class_exec('Review', args)
+
+    def class_exec(self, classname, args):
+        if args[:6] == '.all()':
+            self.do_all(classname)
+        elif args[:6] == '.show(':
+            self.do_show(classname + ' ' + args[7:-2])
+        elif args[:8] == ".count()":
+            count = 0
+            if classname in self.classes:
+                storage.reload()
+                all_ = storage.all()
+                for key in all_.keys():
+                    if classname in str(all_[key]):
+                        count += 1
+                    else:
+                        storage.reload()
+                        all_ = storage.all()
+                        for key in all_.keys():
+                            count += 1
+
+            print(count)
+
+
+        elif args[:9] == '.destroy(':
+            self.do_destroy(classname + ' ' + args[10:-2])
+        elif args[:8] == '.update(':
+            if '{' in args and '}' in args:
+                new_arg = args[8:-1].split('{')
+                new_arg[1] = '{' + new_arg[1]
+            else:
+                new_arg = args[8:-1].split(',')
+            if len(new_arg) == 3:
+                new_arg = " ".join(new_arg)
+                new_arg = new_arg.replace("\"", "")
+                new_arg = new_arg.replace("  ", " ")
+                self.do_update(classname + ' ' + new_arg)
+            elif len(new_arg) == 2:
+                try:
+                    dty = eval(new_arg[1])
+                except:
+                    return
+                for j in dty.keys():
+                    self.do_update(classname + ' ' + new_arg[0][1:-3] + ' ' + str(j) + ' ' + str(dty[j]))
+        else:
+            print("Command not recognized")
 
 if __name__ == '__main__':
-    ConsoleShell().cmdloop()
+    HBNBCommand().cmdloop()
