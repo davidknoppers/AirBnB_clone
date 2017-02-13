@@ -5,7 +5,7 @@ from models import *
 
 
 class FileStorage:
-    __filepath = 'file.json'
+    __file_path = 'file.json'
     __objects = {}
 
     def all(self):
@@ -18,18 +18,21 @@ class FileStorage:
         serialized = {}
         for key in FileStorage.__objects.keys():
             serialized[key] = FileStorage.__objects[key].to_json()
-        with open(FileStorage.__filepath, mode='w',
-                  encoding='utf-8') as MyFile:
+        with open(FileStorage.__file_path, mode='w') as MyFile:
             MyFile.write(json.dumps(serialized))
 
     def reload(self):
-        from models.base_model import BaseModel
-        if os.path.isfile(FileStorage.__filepath):
-            try:
-                with open(FileStorage.__filepath,
-                          mode="r", encoding="utf-8") as MyFile:
-                    obj = json.load(MyFile)
-                    for key in obj.keys():
-                        FileStorage.__objects[key] = BaseModel(obj[key])
-            except Exception as e:
-                pass
+        try:
+            with open(FileStorage.__file_path,
+                      mode="r+", encoding="utf-8") as MyFile:
+                FileStorage.__objects = {}
+                temp = json.load(MyFile)
+                for i in temp.keys():
+                    class_ = temp[i].pop("__class__", None)
+                    cr_at = temp[i]["created_at"]
+                    cr_at = datetime.strptime(cr_at, "%Y-%m-%d %H:%M:%S.%f")
+                    up_at = temp[i]["updated_at"]
+                    up_at = datetime.strptime(up_at, "%Y-%m-%d %H:%M:%S.%f")
+                    FileStorage.__objects[k] = eval(class_)(temp[i])
+        except Exception as e:
+            pass
