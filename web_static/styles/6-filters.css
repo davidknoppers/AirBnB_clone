@@ -1,0 +1,93 @@
+.filters {
+    height: 70px;
+    width: 100%;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+    padding: 10px 0;
+    display: inline-block;
+}
+.locations
+{
+    border-right: 1px solid #DDDDDD;
+    width: 25%;
+    height: 100%;
+    float: left;
+    text-align: left;
+    padding-left: 50px;
+    word-wrap: break-word;
+}
+.amenities {
+    width: 25%;
+    height: 100%;
+    float: left;
+    text-align: left;
+    padding-left: 50px;
+    display: inline-block;
+    word-wrap: break-word;
+}
+h3 {
+    font-weight: 600;
+    margin: 0;
+    padding-bottom: 5px;
+    color: black;
+}
+
+h4 {
+    font-weight: 400;
+    font-size: 14px;
+    margin: 0;
+    color: black;
+}
+button {
+font-size: 18px;
+color: white;
+background-color: #FF5A5F;
+border-color: #FF5A5F;
+height: 48px;
+width: 20%;
+border: 0px;
+border-radius: 4px;
+border-style: solid;
+position: relative;
+text-align: center;
+float: right;
+right: 30px;
+opacity: 1;
+}
+button:hover {
+    opacity: 0.9;
+}
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-indent: 20px;
+}
+
+li {
+    padding-bottom: 10px;
+    text-indent: 40px;
+}
+
+.locations:hover .popover {
+    display: table-cell;
+}
+
+.amenities:hover .popover {
+    display: table-cell;
+}
+
+.popover {
+    color: black;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+    float: left;
+    padding-bottom: 30px;
+    margin-top: 6px;
+    display: none;
+    position: absolute;
+    background: #FAFAFA;
+    width: 25%;
+}
