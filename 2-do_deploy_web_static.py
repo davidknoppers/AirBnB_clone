@@ -5,8 +5,7 @@ env.hosts = ['52.90.159.84', '54.242.30.104']
 
 
 def do_deploy(archive_path):
-    """ deploy that archive"""
-    #get path to web server tmp
+    """ upload archive and delete from web server"""
     try:
         put(archive_path, "/tmp/")
         path = archive_path.strip("versions/")
