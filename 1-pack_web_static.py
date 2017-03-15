@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 # makes a tarball by using fabric local to call shell commands
 from fabric.api import *
 
