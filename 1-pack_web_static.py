@@ -8,7 +8,7 @@ def do_pack():
     """ tarballs web_static"""
     path = "web_static_{:s}.tgz".format(time.strftime("%Y%m%d%H%M%S"))
     try:
-        local("sudo mkdir -p versions")
+        local("mkdir -p versions")
         local("tar -cvzf versions/{} web_static/".format(path))
     except:
         return None
