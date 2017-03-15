@@ -6,7 +6,7 @@ from fabric.api import *
 def do_pack():
     """ tarballs web_static"""
     try:
-        local("sudo mkdir -p versions/")
+        local("sudo mkdir -p versions")
         local("sudo tar -zcvf \"./versions/web_st\
         atic_`date +%Y%m%d%H%M%S`.tgz\"web_static")
     except:
