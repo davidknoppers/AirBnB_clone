@@ -10,5 +10,6 @@ def do_pack():
     try:
         local("mkdir -p versions")
         local("tar -cvzf versions/{} web_static/".format(path))
+        return("versions/{}".format(path))
     except:
         return None
