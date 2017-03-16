@@ -1,6 +1,8 @@
 #!/usr/bin/python3
-# distributes an archive to our web servers
+""" distributes an archive to our web servers """
 from fabric.api import *
+
+
 env.hosts = ['52.90.159.84', '54.242.30.104']
 
 
@@ -14,13 +16,14 @@ def do_deploy(archive_path):
         run(temp)
         temp = "sudo tar -xzf /tmp/" + path + " -C " + directory + path
         run(temp)
-        run("rm /tmp/" + path)
-        temp = "sudo mv " + directory
+        temp = "sudo rm /tmp/" + path
+        run(temp)
+        temp = "sudo mv " + directory + path
         temp += "/web_static/* " + directory + path + "/"
         run(temp)
         temp = "sudo rm -rf " + directory + path + "/web_static"
         run(temp)
-        temp = "rm -rf " + directory
+        temp = "sudo rm -rf /data/web_static/current"
         run(temp)
         temp = "sudo ln -s " + directory + path + "/ /data/web_static/current"
         run(temp)
