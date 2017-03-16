@@ -60,11 +60,9 @@ def deploy():
     packs the code, deploys the code to two servers
     cleans the servers
     """
-    global archive_path
-    if not archive_path:
+    try:
         archive_path = do_pack()
-    if not archive_path:
+        temp = do_deploy(archive_path)
+        return (temp)
+    except:
         return False
-    path = path.strip('\n')
-    temp = do_deploy(path)
-    return (temp)
